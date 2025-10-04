@@ -1,0 +1,15 @@
+meta {
+  name: FindByBarcode
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{host}}/products/barcode/7891234567891
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

@@ -36,8 +36,15 @@ public class ProductService {
         product.setBarcode(dto.barcode());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<ResponseProductDto> getAll(Pageable pageable) {
         return productRepository.findAll(pageable).map(Product::toResponseDto);
+    }
+
+    @Transactional
+    public ResponseProductDto getByBarcode(String barcode) {
+        Product result = productRepository.findByBarcode(barcode)
+                .orElseThrow(() -> new IllegalArgumentException("Product with barcode " + barcode + " not found"));
+        return result.toResponseDto();
     }
 }
