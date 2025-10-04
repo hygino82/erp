@@ -1,0 +1,15 @@
+meta {
+  name: Remove product
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{host}}/products/3
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

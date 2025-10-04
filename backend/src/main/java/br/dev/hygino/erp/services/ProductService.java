@@ -79,4 +79,13 @@ public class ProductService {
             throw new IllegalArgumentException("Product with id " + id + " not found");
         }
     }
+
+    public void deleteById(Long id) {
+        try {
+            Product product = productRepository.getReferenceById(id);
+            productRepository.delete(product);
+        } catch (EntityNotFoundException e) {
+            throw new IllegalArgumentException("Product with id " + id + " not found");
+        }
+    }
 }
