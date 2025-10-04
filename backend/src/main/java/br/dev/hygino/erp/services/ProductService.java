@@ -11,6 +11,7 @@ import br.dev.hygino.erp.dto.RequestProductDto;
 import br.dev.hygino.erp.dto.ResponseProductDto;
 import br.dev.hygino.erp.models.Product;
 import br.dev.hygino.erp.repository.ProductRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -46,5 +47,36 @@ public class ProductService {
         Product result = productRepository.findByBarcode(barcode)
                 .orElseThrow(() -> new IllegalArgumentException("Product with barcode " + barcode + " not found"));
         return result.toResponseDto();
+    }
+
+    @Transactional
+    public ResponseProductDto update(Long id, RequestProductDto dto) {
+        try {
+            Product product = productRepository.getReferenceById(id);
+            dtoToEntity(dto, product);
+            product.setUpdatedAt(LocalDateTime.now());
+            product = productRepository.save(product);
+            return product.toResponseDto();
+        } catch (EntityNotFoundException e) {
+            throw new IllegalArgumentException("Product with id " + id + " not found");
+        }
+    }
+
+    @Transactional
+    public ResponseProductDto updateProductAmount(Long id, Integer amount) {
+        try {
+            Product product = productRepository.getReferenceById(id);
+
+            if (product.getInStock() + amount < 0) {
+                throw new IllegalArgumentException("Insufficient stock for product with id " + id);
+            }
+
+            product.setInStock(product.getInStock() + amount);
+            product.setUpdatedAt(LocalDateTime.now());
+            product = productRepository.save(product);
+            return product.toResponseDto();
+        } catch (EntityNotFoundException e) {
+            throw new IllegalArgumentException("Product with id " + id + " not found");
+        }
     }
 }

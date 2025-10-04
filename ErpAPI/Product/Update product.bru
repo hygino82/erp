@@ -1,0 +1,25 @@
+meta {
+  name: Update product
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{host}}/products/3
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Mouse Gamer Track Ball",
+    "category": "Periféricos",
+    "price": 38.90,
+    "inStock": 60,
+    "barcode": "7891234567897"
+  }
+}
+
+settings {
+  encodeUrl: true
+}

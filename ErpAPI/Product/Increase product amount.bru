@@ -1,0 +1,22 @@
+meta {
+  name: Increase product amount
+  type: http
+  seq: 5
+}
+
+patch {
+  url: {{host}}/products
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "amount": -1000,
+    "id":2
+  }
+}
+
+settings {
+  encodeUrl: true
+}
